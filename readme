@@ -1,0 +1,37 @@
+Codes to pull conformations from free energy surfaces for oligonucleotides. 
+
+Steps:
+
+1) Right now, the python script to generate the FES and pull coordinates is written to function in spyder. It might work OK in ipython. If you already have the Markov model data saved to a .npy file (say model.npy), then load the model object and save it as 'model' using model=np.load("model.npy"). The histogram object can be pulled from the model object using model.histogram(bins=n), where n is the number of bins. Then, generate and show the FES using
+
+fig=plt.figure(figsize=(10,8))
+plt.contourf(-np.ma.log(his.T/his.sum()), 25, cmap=plt.cm.Spectral, extent=model.extent)
+plt.xlabel(r'$X$')
+plt.ylabel(r'$Y$')
+plt.colorbar()
+fig.show()
+
+Otherwise, the code assumes only the raw trajectory (distance and twist values for each frame in the simulation) is available and generates the histogrammed data and FES itself. 
+
+2) When the code is run in spyder, a matplotlib window should pop up; click on all the desired points on the surface, then exit the window by clicking on the 'x' in the top left-hand corner. The coordinates of each click will be saved to an array called 'coords'; the first row of coords contains the coordinates of the first click, the second row the coordinates of the second click, etc. Because no new figure with the number and location of the clicks is generated, THE USER MUST REMEMBER WHICH CLICK CORRESPONDS TO WHICH SET OF COORDINATES. The coordinates must be saved manually by running the following command in the ipython terminal:
+
+np.savetxt(path+'coords.dat',coords)
+
+because spyder will not run it automatically from the script in the spyder terminal.
+
+3) Run 'pull_structures_by_time.sh' in the shell. The variables defined are as follows:
+
+path: DIrectory containing all the relevant files (coords.dat, trajectories, etc.)
+
+mol: Oligonucleodtide name. For example a single-strand with two adenines should be 'AA'.
+
+nbases: Number of nitrogeneous bases in the single strand. Should be 2 for a dinucleotide, 3 for a trinucleotide, etc. 
+
+atoms: Total number of atoms in the oligonucleotide, including hydrogens. Not actually used in the code.
+
+fromat: How is the trajectory written? There are three options: 'DNA' (Distance, twist), 'le4pd' (theta, phi [from the mode-dependent FES]), 'pca' (PC 1, PC 2).
+
+The purpose of the shell script is to compile and execute the ensemble_finder.f95 FORTRAN file, which finds all frames in the trajectory with coordinates that coorespond to the region of the click and writes them to file. The for loop at the end dumps the desired frames from the analyzed trajectory and writes them to a single PDB file.
+
+Eric Beyerle
+1/5/2018
