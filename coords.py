@@ -11,7 +11,7 @@ import matplotlib
 matplotlib.use('Qt5Agg')
 import matplotlib.pyplot as plt
 path="/home/ebeyerle/Desktop/PCA/"
-mode=1
+mode=100
 fh=open("mode","w")
 fh.write(str(mode)+"\n")
 fh.close()
@@ -19,7 +19,7 @@ fh.close()
 #files = [[os.path.join(path,str(i+1),'Distance'), os.path.join(path,str(i+1),'Twist') ] for i in range(10)]
 #path="/home/ebeyerle/Desktop/ApA_test/Data/"
 counter=1
-with open(path+'anly_'+str(mode)+'.dat','r') as data:
+with open(path+'anly_'+str(mode)+'_covar.dat','r') as data:
     x=[]
     #x2=[]
     y=[]
@@ -71,4 +71,4 @@ def onclick(event):
 
     return coords
 cid = fig.canvas.mpl_connect('button_press_event', onclick)
-np.savetxt(path+'coords.dat',coords)
+np.savetxt(path+'coords_'+str(mode)+'.dat',coords)
