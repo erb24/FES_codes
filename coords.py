@@ -11,7 +11,7 @@ import matplotlib
 matplotlib.use('Qt5Agg')
 import matplotlib.pyplot as plt
 path="/home/ebeyerle/Desktop/PCA/"
-mode=100
+mode=10
 fh=open("mode","w")
 fh.write(str(mode)+"\n")
 fh.close()
@@ -19,7 +19,7 @@ fh.close()
 #files = [[os.path.join(path,str(i+1),'Distance'), os.path.join(path,str(i+1),'Twist') ] for i in range(10)]
 #path="/home/ebeyerle/Desktop/ApA_test/Data/"
 counter=1
-with open(path+'anly_'+str(mode)+'_covar.dat','r') as data:
+with open(path+'anly_'+str(mode)+'.dat','r') as data:
     x=[]
     #x2=[]
     y=[]
@@ -53,22 +53,25 @@ y_axis=np.linspace(ext[2],ext[3],bins)
 #plt.plot(y_axis,his1/his1.sum(), linewidth=3, alpha=0.5)
 #plt.xlabel(r'$\varphi \ (Degrees)$', fontsize=25)
 fig=plt.figure(figsize=(10,8))
-plt.contourf(-np.ma.log(his.T/his.sum()), 25, cmap=plt.cm.Spectral, extent=model.extent)
+plt.contourf(-np.ma.log(his.T/his.sum()), 25, cmap='gnuplot', extent=model.extent)
 plt.xlabel(r'$X$')
 plt.ylabel(r'$Y$')
 plt.colorbar()
 fig.show()
 coords = []
 
-def onclick(event):
-    global ix, iy
-    ix, iy = event.xdata, event.ydata
-    print('x = %d, y = %d'%(
-        ix, iy))
+#def onclick(event):
+#    global ix, iy
+#    ix, iy = event.xdata, event.ydata
+#    print('x = %d, y = %d'%(
+#        ix, iy))
+#
+#    global coords
+#    coords.append((ix, iy))
 
-    global coords
-    coords.append((ix, iy))
-
-    return coords
-cid = fig.canvas.mpl_connect('button_press_event', onclick)
+#    return coords
+#cid = fig.canvas.mpl_connect('button_press_event', onclick)
+coords=plt.ginput(-1,show_clicks=True)
+#plt.savefig("fes_"+str(mode)+".pdf")
+print(coords)
 np.savetxt(path+'coords_'+str(mode)+'.dat',coords)
