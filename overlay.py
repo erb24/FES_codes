@@ -57,9 +57,9 @@ for mode in range(1,11):
             x.append(float(p[0]))
             y.append(float(p[1]))
     #coords=plt.ginput(-1,show_clicks=True)
-    plt.scatter([x[0]],[y[0]],c='b',marker='x') #Min proj
-    plt.scatter([x[1]],[y[1]],c='r',marker='x') #Max proj
     for i in range(len(x)):
     	plt.scatter([x[i]],[y[i]],c='w',marker='*')
     	#plt.scatter([minx],[miny],c='w',marker='*')
+    plt.scatter([x[0]],[y[0]],c='b',marker='x') #Min proj
+    plt.scatter([x[1]],[y[1]],c='r',marker='x') #Max proj
     plt.savefig("fes_points_"+str(mode)+".pdf")
