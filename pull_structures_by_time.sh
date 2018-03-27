@@ -4,7 +4,7 @@ codesdir=/home/ebeyerle/Desktop/codes
 mol='1UBQ' #Molecule
 nres=$(sed -n "2p" protname.txt)
 natoms=$(sed -n "4p" protname.txt)
-mult=$(( ${natoms} + 7 ))
+mult=$(( ${natoms} + 7 )) #Assumes the trajectory is GROMACS version 5; might be +6 for GROMACS 2016.
 for mode in `seq 1 5`
 do
   echo "$mode" > mode
