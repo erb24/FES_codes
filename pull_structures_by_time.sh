@@ -1,63 +1,54 @@
 #!/bin/bash -l
 
 codesdir=/home/ebeyerle/Desktop/codes
-#path=/home/promano/Datasets/Oligonucleotides/Trinucleotides
 mol='1UBQ' #Molecule
-#nbases=3 #Number of nucleic acid bases
-for mode in 1 2 3
+nres=$(sed -n "2p" protname.txt)
+natoms=$(sed -n "4p" protname.txt)
+mult=$(( ${natoms} + 7 ))
+for mode in `seq 1 5`
 do
   echo "$mode" > mode
-  nfrs=$(wc -l anly_${mode}.dat | awk '{ print $1 }') #Really twice the number of frames for a trinucleotide
-  #natoms=95 #Total number of atoms in the oligonucleotide
+  nfrs=$(wc -l anly_${mode}.dat | awk '{ print $1 }') 
   format="le4pd"
-  #rm -rfv protname.txt
-
-  #for i in ${mol} ${nbases} ${nfrs} ${natoms}
-  #do
-  #  echo ${i} >> protname.txt
-  #done
 
   echo ${format} > anly
   ncoords=$(wc -l coords_${mode}.dat | awk '{ print $1 }')
-  #ncoords2=$(wc -l coords2.dat | awk '{ print $1 }')
   echo "$ncoords"
   echo "$ncoords2"
   echo $ncoords > ncoords
   cp -v coords_${mode}.dat coords
-#Selcting an average conformation from an ensemble:
-  f95 ensemble_finder.f95
-  ./a.out
-  #mv -v frames_*.ndx ../../Analysis/
-  #mv -v frames2_*.ndx ../../Analysis/
-  #echo "1" > select.inp
-  for state in `seq 1 ${ncoords}`
-  do
-      nframes=$(wc -l frames_${state}.ndx | awk '{ print $1 }')
-      echo "$nframes" > nframes_${state}
-      gmx trjconv -f ${mol}.xtc -s ${mol}_pro1.tpr -fr frames_${state}.ndx -o ${mol}_${state}.pdb < select.inp
-  
-  #f95 ~/Desktop/codes/average_structures.f95 #Find average structure
-  #./a.out
-
-  #Or use GROMACS:
-  echo "1 1" | gmx covar -f ${mol}_${state}.pdb -s ${mol}_pro1.tpr -av avg_mode_${mode}_${state}.pdb -fit no
-  rm -rfv ./#*#
-  done
-
-#Single structure from click:
-  f95 ${codesdir}/structure_finder.f95
+  #Selcting an average conformation from an ensemble:
+  f95 ${codesdir}/test_ensemble_finder.f95
   ./a.out
   echo "1" > select.inp
-  for state in `seq 1 ${ncoords}`
+  gmx trjconv -f ${mol}.xtc -s ${mol}_pro1.tpr -fr frames_${mode}.ndx -o all.pdb < select.inp
+  cp -v all.pdb tmp
+  mkdir -v mode_${mode}_states
+  while read line 
+  do 
+    counter=$(( ${counter} +1 )) 
+    echo "$line"
+    tline=$( echo "${line}*${mult}" | bc -l)
+    echo "$tline"
+    sed -n "1,${tline}p" tmp >${mol}_${counter}.pdb
+    cp -v ${mol}_${counter}.pdb mode_${mode}_states/
+    sed -i "1,${tline}d" tmp
+  done <"nframes_${mode}"
+  rm -rfv tmp
+  echo "$counter"
+
+  for state in `seq 1 ${counter}`
   do
-      gmx trjconv -f ${mol}.xtc -s ${mol}_pro1.tpr -fr struct_${state}.ndx -o ${mol}_mode_${mode}_struct_${state}.pdb < select.inp
+    echo "1 1" | gmx rmsf -f ${mol}_${state}.pdb -s ${mol}_pro1.tpr -ox avg_mode_${mode}_${state}.pdb -fit no
+    rm -rfv ${mol}_${state}.pdb
   done
   
-#Concatenate PDB files
+  #Concatenate PDB files
   rm -rfv avg_mode_${i}.pdb
-  cat avg_mode_${mode}_*.pdb >> avg_mode_${i}.pdb
-  rm -rfv ${mol}_struct${mode}.pdb
-  cat ${mol}_mode_${mode}_struct_*.pdb >> ${mol}_struct${mode}.pdb
+  cat avg_mode_${mode}_*.pdb >> avg_mode_${mode}.pdb
+  rm -rfv ${mol}_${mode}.pdb
 done
+
+rm -rfv ./#*#
 
 exit
