@@ -13,7 +13,7 @@ average_structures.f95 -- FORTRAN code for finding the average conformation of a
 ensemble_finder.f95 -- Deprecated code for finding the ensemble of structures correpsonding to the given coordinates. Works, but is very inefficient becasue I have it re-read the trajectory for every input coordinate. Likely better and more efficient to use ...
 
 test_ensemble_finder.f95 -- Should probably be re-named, but this version writes all the frames to a single file, writes them to a single PDB file (thus reading the original trajectory only once), then splits the PDB file, using knowledge of the gmx trjconv header style and the number of coordinates in each structure of the PDB file. 
-**Note**: assumes GROMACS version 5 is being used. Could require tweaking the mult variable for other versions of GROMACS.
+**Note**: assumes GROMACS version 5 is being used. Could require tweaking the "mult" variable for other versions of GROMACS.
 
 structure_finder.f95 -- Uses a distance criterion to find the closest structure from a set of structures to the given structure.
 
