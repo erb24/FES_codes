@@ -7,7 +7,7 @@ print_fes.py -- Simply a python script that takes a processed trajectory (anly_\
 
 coords.py -- Plots the FES and then uses the matplotlib.pyplot.ginput function to interactively select and write the selected coordinates to file.
 
-FTS-Ensemble-Evolve.py -- A non-modularized version of the finite-temperature-string (FTS) method for finding the most probable energy pathway along a 2D energy surface. Modeled after the information presented in Weinan, Ren, and Vanden-Eijnden, *J. Phys. Chem. B* **2005**, *109*, 6688-6693.
+FTS-Ensemble-Evolve.py -- A non-modularized version of the finite-temperature-string (FTS) method for finding the most probable energy pathway along a 2D energy surface. Modeled after the information presented in E, Ren, and Vanden-Eijnden, *J. Phys. Chem. B* **2005**, *109*, 6688-6693.
 
 average_structures.f95 -- FORTRAN code for finding the average conformation of a given ensemble of structures. Probably better to use the GROMACS option from gmx rmsf : gmx rmsf -f structs.pdb -s top.tpr -ox average.pdb -fit no < input.inp
 
