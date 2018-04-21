@@ -9,6 +9,8 @@ coords.py -- Plots the FES and then uses the matplotlib.pyplot.ginput function t
 
 FTS-Ensemble-Evolve.py -- A non-modularized version of the finite-temperature-string (FTS) method for finding the most probable energy pathway along a 2D energy surface. Modeled after the information presented in E, Ren, and Vanden-Eijnden, *J. Phys. Chem. B* **2005**, *109*, 6688-6693.
 
+FTS-all.ipynb -- Slightly cleaner FTS notebook. Performs a round of ZTS before performing two rounds of FTS: once at a low resolution with few strings and then at a higher resolution with many strings. This notebook is also more modularized, with the algorithms to perform ZTS and FTS written as functions instead of defined in a cell.
+
 average_structures.f95 -- FORTRAN code for finding the average conformation of a given ensemble of structures. Probably better to use the GROMACS option from gmx rmsf : gmx rmsf -f structs.pdb -s top.tpr -ox average.pdb -fit no < input.inp
 
 ensemble_finder.f95 -- Deprecated code for finding the ensemble of structures correpsonding to the given coordinates. Likely better and more efficient to use ...
